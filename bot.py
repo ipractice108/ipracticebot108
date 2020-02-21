@@ -32,6 +32,7 @@ def log(message, answer):
 
 @bot.message_handler(content_types=['text', 'video'])
 def handle_text(message):
+    print("message text is: " + message.text)
     if message.text == "/start":
         bot.send_message(message.chat.id, 'пожалуйста внимательно выполняйте упражнения, следите за дыханием, напишите команду /video')
     elif message.text == "/video":
@@ -63,6 +64,7 @@ def getMessage():
     bot.process_new_updates([telebot.types.Update.de_json(request.stream.read().decode("utf-8"))])
     return "!", 200
 
+print("url is:" + constants.heroku_url + constants.token)
 
 @server.route("/")
 def webhook():
