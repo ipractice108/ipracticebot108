@@ -7,7 +7,6 @@ import telebot
 import constants
 from flask import Flask, request
 
-server = Flask(__name__)
 bot = telebot.TeleBot(constants.token)
 
  # Outputs debug messages to console.
@@ -25,7 +24,7 @@ def log(message, answer):
   print("\n -----")
   from datetime import datetime
   print(datetime.now())
-  print("Сообщение от (0) (1), (id = (2)) \n Текст - (3)".format(message.from_user.first_name,
+  print("Сообщение от {} {}, (id = {}) \n Текст - {}".format(message.from_user.first_name,
                                                                  message.from_user.last_name,
                                                                  str(message.from_user.id),
                                                                  message.text))
@@ -61,8 +60,7 @@ def handle_text(message):
     else:
         bot.send_message(message.chat.id, "Превосходно, теперь напишите /ready")
 
-
-bot.polling(none_stop=True)
+# bot.polling(none_stop=True)
 
 # @server.route('/' + constants.token, methods=['POST'])
 # def getMessage():
