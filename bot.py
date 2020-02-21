@@ -1,13 +1,18 @@
 # -*- coding: utf-8 -*-
 
 import os
+import urllib
+import logging
 import telebot
 import constants
-import urllib
 from flask import Flask, request
 
 server = Flask(__name__)
 bot = telebot.TeleBot(constants.token)
+
+ # Outputs debug messages to console.
+logger = telebot.logger
+telebot.logger.setLevel(logging.DEBUG)
 
 upd = bot.get_updates()
 # last_upd = upd[-1]
@@ -57,23 +62,21 @@ def handle_text(message):
         bot.send_message(message.chat.id, "Превосходно, теперь напишите /ready")
 
 
-# bot.polling(none_stop=True)
+bot.polling(none_stop=True)
 
-@server.route('/' + constants.token, methods=['POST'])
-def getMessage():
-    bot.process_new_updates([telebot.types.Update.de_json(request.stream.read().decode("utf-8"))])
-    return "!", 200
+# @server.route('/' + constants.token, methods=['POST'])
+# def getMessage():
+#     bot.process_new_updates([telebot.types.Update.de_json(request.stream.read().decode("utf-8"))])
+#     return "!", 200
 
-print("url is:" + constants.heroku_url + constants.token)
-
-@server.route("/")
-def webhook():
-    bot.remove_webhook()
-    bot.set_webhook(url=constants.heroku_url + constants.token)
-    return "!", 200
+# @server.route("/")
+# def webhook():
+#     bot.remove_webhook()
+#     bot.set_webhook(url=constants.heroku_url + constants.token)
+#     return "!", 200
 
 
-if __name__ == "__main__":
-    server.run(host="0.0.0.0", port=int(os.environ.get('PORT', 5000)))
+# if __name__ == "__main__":
+#     server.run(host="0.0.0.0", port=int(os.environ.get('PORT', 5000)))
 
 
