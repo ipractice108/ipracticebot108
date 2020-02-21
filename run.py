@@ -5,7 +5,6 @@ from bot import bot
 from telebot import types
  
 server = flask.Flask(__name__)
-print("I am here")
  
 @server.route('/' + constants.token, methods=['POST'])
 def get_message():
@@ -14,9 +13,10 @@ def get_message():
     return "!", 200
  
 @server.route('/', methods=["GET"])
-def index():
+def webhook():
     bot.remove_webhook()
     bot.set_webhook(url=constants.heroku_url + constants.token)
+    print("Webhook registered")
     return "Hello from Heroku!", 200
  
 if __name__ == "__main__":
