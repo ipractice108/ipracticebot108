@@ -12,7 +12,7 @@ def get_message():
          flask.request.stream.read().decode("utf-8"))])
     return "!", 200
  
-@server.route('/', methods=["GET"])
+@server.route('/')
 def webhook():
     bot.remove_webhook()
     bot.set_webhook(url=constants.heroku_url + constants.token)
