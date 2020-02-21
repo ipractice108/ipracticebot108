@@ -7,8 +7,8 @@ import telebot
 import constants
 
 bot = telebot.TeleBot(constants.token)
-logger = telebot.logger
-telebot.logger.setLevel(logging.DEBUG)
+# logger = telebot.logger
+# telebot.logger.setLevel(logging.DEBUG)
 
 # upd = bot.get_updates()
 # last_upd = upd[-1]
