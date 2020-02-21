@@ -5,6 +5,7 @@ from bot import bot
 from telebot import types
  
 server = flask.Flask(__name__)
+print("I am here")
  
 @server.route('/' + constants.token, methods=['POST'])
 def get_message():
@@ -19,5 +20,4 @@ def index():
     return "Hello from Heroku!", 200
  
 if __name__ == "__main__":
-    print("I am here")
     server.run(host="0.0.0.0", port=int(os.environ.get('PORT', 5000)))
