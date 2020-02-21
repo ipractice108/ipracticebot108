@@ -1,20 +1,18 @@
+# -*- coding: utf-8 -*-
+
+import os
 import telebot
 import constants
-import os
-import random
-import urllib.request as urllib2
-import webbrowser
-import parser
-# from bs4 import BeautifulSoup
+import urllib
+from flask import Flask, request
 
-
+server = Flask(__name__)
 bot = telebot.TeleBot(constants.token)
-upd = bot.get_updates()
-#   print(upd)
 
-last_upd = upd[-1]
-message_from_user = last_upd.message
-print(message_from_user)
+upd = bot.get_updates()
+# last_upd = upd[-1]
+# message_from_user = last_upd.message
+# print(message_from_user)
 
 print(bot.get_me())
 
@@ -52,14 +50,28 @@ def handle_text(message):
     elif message.text == "зарегистрироваться на вебинар":
         bot.send_message(message.chat.id, 'пожалуйста заполните форму обратной связи на сайте https://ipractice.club')
     elif message.text == "полезные книги":
-        urllib2.urlretrieve('http://youtu.be/bTVNW4wTOXw')
+        urllib.request.urlretrieve('http://youtu.be/bTVNW4wTOXw')
 
     else:
         bot.send_message(message.chat.id, "Превосходно, теперь напишите /ready")
 
 
-bot.polling(none_stop=True)
+# bot.polling(none_stop=True)
+
+@server.route('/' + constants.token, methods=['POST'])
+def getMessage():
+    bot.process_new_updates([telebot.types.Update.de_json(request.stream.read().decode("utf-8"))])
+    return "!", 200
 
 
+@server.route("/")
+def webhook():
+    bot.remove_webhook()
+    bot.set_webhook(url=constants.heroku_url + constants.token)
+    return "!", 200
+
+
+if __name__ == "__main__":
+    server.run(host="0.0.0.0", port=int(os.environ.get('PORT', 5000)))
 
 
