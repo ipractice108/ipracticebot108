@@ -56,3 +56,6 @@ def handle_text(message):
 
     else:
         bot.send_message(message.chat.id, "Превосходно, теперь напишите /ready")
+
+if __name__ == '__main__':
+    bot.polling(none_stop=True)
