@@ -1,20 +1,19 @@
+# -*- coding: utf-8 -*-
+
+import os
+import urllib
+import logging
 import telebot
 import constants
-import os
-import random
-import urllib.request as urllib2
-import webbrowser
-import parser
-# from bs4 import BeautifulSoup
-
 
 bot = telebot.TeleBot(constants.token)
-upd = bot.get_updates()
-#   print(upd)
+logger = telebot.logger
+telebot.logger.setLevel(logging.DEBUG)
 
-last_upd = upd[-1]
-message_from_user = last_upd.message
-print(message_from_user)
+# upd = bot.get_updates()
+# last_upd = upd[-1]
+# message_from_user = last_upd.message
+# print(message_from_user)
 
 print(bot.get_me())
 
@@ -22,7 +21,7 @@ def log(message, answer):
   print("\n -----")
   from datetime import datetime
   print(datetime.now())
-  print("Сообщение от (0) (1), (id = (2)) \n Текст - (3)".format(message.from_user.first_name,
+  print("Сообщение от {} {}, (id = {}) \n Текст - {}".format(message.from_user.first_name,
                                                                  message.from_user.last_name,
                                                                  str(message.from_user.id),
                                                                  message.text))
@@ -34,6 +33,7 @@ def log(message, answer):
 
 @bot.message_handler(content_types=['text', 'video'])
 def handle_text(message):
+    print("message text is: " + message.text)
     if message.text == "/start":
         bot.send_message(message.chat.id, 'Здравствуйте! Вас приветствует чат бот ipractice.club '
                                           'Для вас комплексы упражнений для укрепления всего опорно двигательного аппарата, развития силы, гибкости и равновесия.'
@@ -64,14 +64,10 @@ def handle_text(message):
     elif message.text == "зарегистрироваться на вебинар":
         bot.send_message(message.chat.id, 'пожалуйста заполните форму обратной связи на сайте https://ipractice.club')
     elif message.text == "полезные книги":
-        urllib2.urlretrieve('http://youtu.be/bTVNW4wTOXw')
+        urllib.request.urlretrieve('http://youtu.be/bTVNW4wTOXw')
 
     else:
         bot.send_message(message.chat.id, "Превосходно, теперь напишите /ready")
 
-
-bot.polling(none_stop=True)
-
-
-
-
+if __name__ == '__main__':
+    bot.polling(none_stop=True)
