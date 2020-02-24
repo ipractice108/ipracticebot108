@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 import os
 import urllib
 import logging
@@ -7,6 +6,8 @@ import telebot
 import constants
 
 bot = telebot.TeleBot(constants.token)
+
+upd = bot.get_updates()
 logger = telebot.logger
 telebot.logger.setLevel(logging.DEBUG)
 
