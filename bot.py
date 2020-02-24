@@ -1,15 +1,17 @@
 # -*- coding: utf-8 -*-
-
 import os
+import urllib
+import logging
 import telebot
 import constants
-import urllib
-from flask import Flask, request
 
-server = Flask(__name__)
 bot = telebot.TeleBot(constants.token)
 
 upd = bot.get_updates()
+logger = telebot.logger
+telebot.logger.setLevel(logging.DEBUG)
+
+# upd = bot.get_updates()
 # last_upd = upd[-1]
 # message_from_user = last_upd.message
 # print(message_from_user)
@@ -20,7 +22,7 @@ def log(message, answer):
   print("\n -----")
   from datetime import datetime
   print(datetime.now())
-  print("Сообщение от (0) (1), (id = (2)) \n Текст - (3)".format(message.from_user.first_name,
+  print("Сообщение от {} {}, (id = {}) \n Текст - {}".format(message.from_user.first_name,
                                                                  message.from_user.last_name,
                                                                  str(message.from_user.id),
                                                                  message.text))
@@ -32,6 +34,7 @@ def log(message, answer):
 
 @bot.message_handler(content_types=['text', 'video'])
 def handle_text(message):
+    print("message text is: " + message.text)
     if message.text == "/start":
         bot.send_message(message.chat.id, 'Здравствуйте! Вас приветствует чат бот ipractice.club '
                                           'Для вас комплексы упражнений для укрепления всего опорно двигательного аппарата, развития силы, гибкости и равновесия.'
@@ -67,23 +70,5 @@ def handle_text(message):
     else:
         bot.send_message(message.chat.id, "Превосходно, теперь напишите /ready")
 
-
-# bot.polling(none_stop=True)
-
-@server.route('/' + constants.token, methods=['POST'])
-def getMessage():
-    bot.process_new_updates([telebot.types.Update.de_json(request.stream.read().decode("utf-8"))])
-    return "!", 200
-
-
-@server.route("/")
-def webhook():
-    bot.remove_webhook()
-    bot.set_webhook(url=constants.heroku_url + constants.token)
-    return "!", 200
-
-
-if __name__ == "__main__":
-    server.run(host="0.0.0.0", port=int(os.environ.get('PORT', 5000)))
-
-
+if __name__ == '__main__':
+    bot.polling(none_stop=True)
